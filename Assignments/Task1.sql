@@ -1,6 +1,7 @@
 -- Creating the database 
 Create Database Courier_Management_System
--- Creating the Tables
+
+-- Creating the Table User
 CREATE TABLE UserTable (
     UserID INT PRIMARY KEY,
     Name VARCHAR(255),
@@ -10,6 +11,7 @@ CREATE TABLE UserTable (
     Address TEXT
 );
 
+-- Creating the Table Courier
 CREATE TABLE Courier (
     CourierID INT PRIMARY KEY,
     SenderName VARCHAR(255),
@@ -22,12 +24,14 @@ CREATE TABLE Courier (
     DeliveryDate DATE
 );
 
+--Creating the Table CourierServices
 CREATE TABLE CourierServices (
     ServiceID INT PRIMARY KEY,
     ServiceName VARCHAR(100),
     Cost DECIMAL(8,2)
 );
 
+--creating the Table Employee
 CREATE TABLE Employee (
     EmployeeID INT PRIMARY KEY,
     Name VARCHAR(255),
@@ -36,13 +40,14 @@ CREATE TABLE Employee (
 	Role VARCHAR(50),
     Salary DECIMAL(10,2)
 );
-
+--Creating the Table Location
 CREATE TABLE Location (
     LocationID INT PRIMARY KEY,
     LocationName VARCHAR(100),
     Address TEXT
 );
 
+--Creating the Table Payment
 CREATE TABLE Payment (
     PaymentID INT PRIMARY KEY,
     CourierID INT,

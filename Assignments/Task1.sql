@@ -1,5 +1,6 @@
 -- Creating the database 
 Create Database Courier_Management_System
+-- Creating the Tables
 CREATE TABLE UserTable (
     UserID INT PRIMARY KEY,
     Name VARCHAR(255),

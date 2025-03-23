@@ -201,7 +201,6 @@ join CourierServices cs on c.ServiceID = cs.ServiceID
 where p.Amount > cs.Cost;
 --upto joins completed	
 
---Task4 upto joins Completed
 
 
 

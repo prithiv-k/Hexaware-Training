@@ -20,7 +20,8 @@ on p.PaymentID=l.LocationID
  join Courier
  on Payment.CourierID=Courier.CourierID
 
- --27.Total payments received for each courier 	select c.courierid, c.sendername, c.receivername, sum(p.amount) as totalpayments
+ --27.Total payments received for each courier 
+	select c.courierid, c.sendername, c.receivername, sum(p.amount) as totalpayments
 	from courier c
 	join payment p 
 	on c.courierid = p.courierid
@@ -28,7 +29,23 @@ on p.PaymentID=l.LocationID
 	order by totalpayments desc;
 
 --28. List payments made on a specific date
-Select p.PaymentID,p.Amount,c.CourierId from Payment as pjoin Courier as con c.CourierID=p.CourierIDwhere PaymentDate='2025-03-19';--29.Get Courier Information for Each Payment Select p.PaymentID,p.Amount,c.CourierID,c.SenderName,c.ReceiverName,c.status from Payment as pjoin Courier as con p.CourierID=c.CourierID--30.Get Payment Details with LocationSelect p.PaymentID,l.LocationID,p.Amount,l.LocationName,l.Address from Payment as pjoin Location as lon p.PaymentID=l.LocationID--31.Calculating Total Payments for Each Courier select courierid,sum(amount) as total_payments
+Select p.PaymentID,p.Amount,c.CourierId from Payment as p
+join Courier as c
+on c.CourierID=p.CourierID
+where PaymentDate='2025-03-19';
+
+--29.Get Courier Information for Each Payment 
+Select p.PaymentID,p.Amount,c.CourierID,c.SenderName,c.ReceiverName,c.status from Payment as p
+join Courier as c
+on p.CourierID=c.CourierID
+
+--30.Get Payment Details with Location
+Select p.PaymentID,l.LocationID,p.Amount,l.LocationName,l.Address from Payment as p
+join Location as l
+on p.PaymentID=l.LocationID
+
+--31.Calculating Total Payments for Each Courier 
+select courierid,sum(amount) as total_payments
 from payment
 group by courierid
 order by total_payments desc;

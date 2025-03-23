@@ -17,11 +17,18 @@ where salary> (select avg(salary) from Employee)
 from courier c  
 join payment p on c.courierid = p.courierid;
 
---53. Find the locations where the maximum payment amount was made select location.locationname  
+--53. Find the locations where the maximum payment amount was made 
+select location.locationname  
 from location  
 join payment on location.locationid = payment.locationid  
 where payment.amount = (select max(amount) from payment);
 
 --54. Find all couriers whose weight is greater than the weight of all couriers sent by a specific sender(e.g., 'SenderName')
-Select weight from Courier where SenderName='Raj'
-select * from Courierwhere weight>all(Select weight from Courier where SenderName='Raj')
+Select weight from Courier where SenderName='Raj'
+
+select * from Courier
+where weight>all(Select weight from Courier where SenderName='Raj')
+
+--Task4 Completed
+
+

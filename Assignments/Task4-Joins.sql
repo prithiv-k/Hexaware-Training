@@ -200,6 +200,8 @@ join Courier c on p.CourierID = c.CourierID
 join CourierServices cs on c.ServiceID = cs.ServiceID
 where p.Amount > cs.Cost;
 
+--Task4 upto joins Completed
+
 
 
 

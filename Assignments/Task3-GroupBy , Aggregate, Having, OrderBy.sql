@@ -81,3 +81,5 @@ where p.paymentdate < '2025-03-18'
 group by l.locationid, l.locationname
 having sum(p.amount) > 5000;
 
+--Task 3 completed
+

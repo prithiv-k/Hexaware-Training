@@ -68,7 +68,11 @@ full outer Join CourierServices as cs
 on c.CourierID=cs.ServiceID
 
 --35.Retrieve a list of all employees and their corresponding payments, including cases where there are no matches on either side 
-select EmployeeID,Name,Salary from Employee
+Select e.EmployeeID, e.Name AS EmployeeName, e.Email,e.ContactNumber,e.Role,e.Salary,p.PaymentID,p.CourierID,p.LocationID, p.Amount, p.PaymentDate
+from Employee e
+full outer join Payment p 
+on e.EmployeeID = p.CourierID;
+
 
 --36.List all users and all courier services, showing all possible combinations.
 select u.UserID,c.ServiceID,u.Name,c.ServiceName from UserTable u

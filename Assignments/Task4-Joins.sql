@@ -68,7 +68,11 @@ full outer Join CourierServices as cs
 on c.CourierID=cs.ServiceID
 
 --35.Retrieve a list of all employees and their corresponding payments, including cases where there are no matches on either side 
-select EmployeeID,Name,Salary from Employee
+Select e.EmployeeID, e.Name AS EmployeeName, e.Email,e.ContactNumber,e.Role,e.Salary,p.PaymentID,p.CourierID,p.LocationID, p.Amount, p.PaymentDate
+from Employee e
+full outer join Payment p 
+on e.EmployeeID = p.CourierID;
+
 
 --36.List all users and all courier services, showing all possible combinations.
 select u.UserID,c.ServiceID,u.Name,c.ServiceName from UserTable u
@@ -112,11 +116,6 @@ on Courier.CourierID=CourierServices.ServiceID
 SELECT SenderName, COUNT(CourierID) AS Total_Sent
 FROM Courier
 GROUP BY SenderName
-
---another method
-select SenderName, STRING_AGG(CourierID, ', ') AS CouriersSent
-from Courier
-group by SenderName
 
 --44.List all employees who share the same role. 
 select e.employeeid, e.name, e.role
@@ -201,7 +200,6 @@ join CourierServices cs on c.ServiceID = cs.ServiceID
 where p.Amount > cs.Cost;
 --upto joins completed	
 
---Task4 upto joins Completed
 
 
 

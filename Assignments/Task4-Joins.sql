@@ -117,11 +117,6 @@ SELECT SenderName, COUNT(CourierID) AS Total_Sent
 FROM Courier
 GROUP BY SenderName
 
---another method
-select SenderName, STRING_AGG(CourierID, ', ') AS CouriersSent
-from Courier
-group by SenderName
-
 --44.List all employees who share the same role. 
 select e.employeeid, e.name, e.role
 from employee e

@@ -29,8 +29,9 @@ namespace CodingAssignmentsC_.Dao
                         cmd.Connection = sqlCon;
 
                         StringBuilder queryBuilder = new StringBuilder();
-                        queryBuilder.Append($"INSERT INTO Employee (Name, Role) ");
-                        queryBuilder.Append($"VALUES ('{employee.Name}', '{employee.Role}')");
+                        queryBuilder.Append("INSERT INTO Employee (Name, Email, ContactNumber, Role, Salary) ");
+                        queryBuilder.Append($"VALUES ('{employee.Name}', '{employee.Email}', '{employee.ContactNumber}', '{employee.Role}', {employee.Salary})");
+
 
                         cmd.CommandText = queryBuilder.ToString();
 
@@ -39,7 +40,7 @@ namespace CodingAssignmentsC_.Dao
                             sqlCon.Open();
                         }
 
-                        // Execute query and get the ID (auto-generated) of the Employee
+                       
                         cmd.ExecuteNonQuery();
 
                         // Retrieve the auto-generated ID using SCOPE_IDENTITY()

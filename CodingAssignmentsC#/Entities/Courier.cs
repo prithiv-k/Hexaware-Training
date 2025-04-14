@@ -16,11 +16,7 @@ namespace CodingAssignmentsC_.Entities
         public int ? EmployeeID { get; set; }
         public int? ServiceID {  get; set; }
 
-        private static int _nextTrackingNumber = 2003;
-        public static string GenerateTrackingNumber()
-        {
-            return $"TRK{_nextTrackingNumber++}";
-        }
+     
 
     }
 

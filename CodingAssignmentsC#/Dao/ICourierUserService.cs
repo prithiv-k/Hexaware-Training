@@ -1,8 +1,10 @@
-﻿    using System;
+﻿using CodingAssignmentsC_.Entities;
+using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
 
     namespace EcommerceApp.DAO
     {
@@ -17,5 +19,9 @@
             List<T> GetAssignedOrders(long courierStaffId);
 
            string DeleteCourier(String trackingNumber);
-        }
+
+           string GetPaymentAmountByTrackingNumber(string trackingNumber);
+
+
     }
+}

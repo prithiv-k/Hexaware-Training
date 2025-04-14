@@ -1,14 +1,26 @@
 ﻿using CodingAssignmentsC_.Entities;
 using CodingAssignmentsC_.Util;
+using EcommerceApp.DAO;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace EcommerceApp.DAO
+namespace CodingAssignmentsC_.Service
 {
-    public class CourierUserService : ICourierUserService<Courier>
+    public class CourierUserServiceImpl : ICourierUserService<Courier>  
     {
+        protected CourierCompany companyObj;
+
+      
+        public List<Courier> GetAllCouriers()
+        {
+            return companyObj.Couriers; // assuming Couriers is a List<Courier> inside CourierCompany
+        }
+
+        // Implement other methods from ICourierUserService...
         SqlConnection sqlCon = DBConnUtil.GetConnection("appSettings.json");
         SqlCommand cmd = new SqlCommand();
         SqlDataReader dr;
@@ -17,12 +29,7 @@ namespace EcommerceApp.DAO
         {
             try
             {
-                // Generate tracking number using static variable
-                courierObj.TrackingNumber = Courier.GenerateTrackingNumber();
-
-
-
-                DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now.AddDays(3)); // Delivery in 3 days
+             // DateOnly dateOnly = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
 
 
                 cmd.Connection = sqlCon;
@@ -50,7 +57,7 @@ namespace EcommerceApp.DAO
             }
         }
 
-        // Other methods like GetOrderStatus, CancelOrder, etc., can follow the same pattern
+
         public string GetOrderStatus(string trackingNumber)
         {
             string status = "Not Found";
@@ -103,9 +110,9 @@ namespace EcommerceApp.DAO
                     sqlCon.Open();
                 }
 
-                int rowsAffected = cmd.ExecuteNonQuery(); // returns number of affected rows
+                int rowsAffected = cmd.ExecuteNonQuery();
 
-                return rowsAffected > 0; // if at least one row is updated, return true
+                return rowsAffected > 0;
             }
             catch (SqlException)
             {
@@ -202,6 +209,53 @@ namespace EcommerceApp.DAO
                 sqlCon.Close();
             }
         }
+        public string GetPaymentAmountByTrackingNumber(string trackingNumber)
+        {
+            try
+            {
+                cmd.Connection = sqlCon;
 
+                // Step 1: Get the ServiceID from the TrackingNumber
+                cmd.CommandText = $"SELECT ServiceID FROM Courier WHERE TrackingNumber = '{trackingNumber}'";
+
+                if (sqlCon.State == System.Data.ConnectionState.Closed)
+                    sqlCon.Open();
+
+                object serviceIdObj = cmd.ExecuteScalar();
+
+                if (serviceIdObj == null)
+                {
+                    Console.WriteLine("Invalid Tracking Number.");
+                    return "Invalid Tracking Number";
+                }
+
+                int serviceId = Convert.ToInt32(serviceIdObj);
+
+                // Step 2: Get Amount Details from the Payment table
+                cmd.CommandText = $"SELECT Cost  FROM CourierServices WHERE ServiceID = {serviceId}";
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    if (dr["Cost"] != DBNull.Value)
+                    {
+                        return dr["Cost"].ToString();
+                    }
+                }
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("SQL Error: " + ex.Message);
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            return "No Amount Found";
+        }
     }
+
 }

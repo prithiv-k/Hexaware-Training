@@ -241,7 +241,7 @@ namespace CodingAssignmentsC_.Service
             {
                 cmd.Connection = sqlCon;
 
-                /
+                
                 cmd.CommandText = $"SELECT ServiceID FROM Courier WHERE TrackingNumber = '{trackingNumber}'";
 
                 if (sqlCon.State == System.Data.ConnectionState.Closed)

@@ -1,4 +1,5 @@
 ﻿using CodingAssignmentsC_.Entities;
+using CodingAssignmentsC_.Exceptions;
 using CodingAssignmentsC_.Util;
 using EcommerceApp.DAO;
 using Microsoft.Data.SqlClient;
@@ -60,8 +61,6 @@ namespace CodingAssignmentsC_.Service
 
         public string GetOrderStatus(string trackingNumber)
         {
-            string status = "Not Found";
-
             try
             {
                 cmd.Connection = sqlCon;
@@ -78,29 +77,40 @@ namespace CodingAssignmentsC_.Service
 
                 if (dr.HasRows)
                 {
+                    string status = string.Empty;
                     while (dr.Read())
                     {
                         status = Convert.ToString(dr["Status"]);
                     }
                     dr.Close();
+                    return status;
                 }
-
-                return status;
+                else
+                {
+                    dr.Close();
+                    throw new TrackingNumberNotFoundException();
+                }
+            }
+            catch (TrackingNumberNotFoundException)
+            {
+                return "Tracking number not found.";
             }
             catch (SqlException)
             {
-                return "Error retrieving status";
+                return "Error retrieving status.";
             }
             finally
             {
                 sqlCon.Close();
             }
         }
+
         public bool CancelOrder(string trackingNumber)
         {
             try
             {
                 cmd.Connection = sqlCon;
+
                 StringBuilder queryBuilder = new StringBuilder();
                 queryBuilder.Append($"UPDATE Courier SET Status = 'Cancelled' WHERE TrackingNumber = '{trackingNumber}'");
                 cmd.CommandText = queryBuilder.ToString();
@@ -112,10 +122,21 @@ namespace CodingAssignmentsC_.Service
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
-                return rowsAffected > 0;
+                if (rowsAffected == 0)
+                {
+                    throw new TrackingNumberNotFoundException();
+                }
+
+                return true;
             }
-            catch (SqlException)
+            catch (TrackingNumberNotFoundException ex)
             {
+                Console.WriteLine($"Error: {ex.Message}"); // Optional detailed message
+                return false;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error occurred while cancelling the order. Details: {ex.Message}");
                 return false;
             }
             finally
@@ -123,6 +144,8 @@ namespace CodingAssignmentsC_.Service
                 sqlCon.Close();
             }
         }
+
+
         public List<Courier> GetAssignedOrders(long courierStaffId)
         {
             List<Courier> assignedCouriers = new List<Courier>();
@@ -178,10 +201,8 @@ namespace CodingAssignmentsC_.Service
             try
             {
                 cmd.Connection = sqlCon;
-
                 StringBuilder queryBuilder = new StringBuilder();
                 queryBuilder.Append($"DELETE FROM Courier WHERE TrackingNumber = '{trackingNumber}'");
-
                 cmd.CommandText = queryBuilder.ToString();
 
                 if (sqlCon.State == System.Data.ConnectionState.Closed)
@@ -191,24 +212,29 @@ namespace CodingAssignmentsC_.Service
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
-                if (rowsAffected > 0)
+                if (rowsAffected == 0)
                 {
-                    return $"Order with Tracking Number {trackingNumber} deleted successfully.";
+                    throw new TrackingNumberNotFoundException();
                 }
-                else
-                {
-                    return $"No order found with Tracking Number {trackingNumber}.";
-                }
+
+                return "Courier deleted successfully.";
             }
-            catch (SqlException ex)
+            catch (TrackingNumberNotFoundException ex)
             {
-                return "SQL Error: " + ex.Message;
+                return ex.Message;
+            }
+            catch (SqlException)
+            {
+                return "Database error occurred while deleting the courier.";
             }
             finally
             {
                 sqlCon.Close();
             }
         }
+
+
+
         public string GetPaymentAmountByTrackingNumber(string trackingNumber)
         {
             try
@@ -225,14 +251,13 @@ namespace CodingAssignmentsC_.Service
 
                 if (serviceIdObj == null)
                 {
-                    Console.WriteLine("Invalid Tracking Number.");
-                    return "Invalid Tracking Number";
+                    throw new TrackingNumberNotFoundException();
                 }
 
                 int serviceId = Convert.ToInt32(serviceIdObj);
 
-                // Step 2: Get Amount Details from the Payment table
-                cmd.CommandText = $"SELECT Cost  FROM CourierServices WHERE ServiceID = {serviceId}";
+                // Step 2: Get Amount Details from the CourierServices table
+                cmd.CommandText = $"SELECT Cost FROM CourierServices WHERE ServiceID = {serviceId}";
                 SqlDataReader dr = cmd.ExecuteReader();
 
                 if (dr.Read())
@@ -244,18 +269,23 @@ namespace CodingAssignmentsC_.Service
                 }
 
                 dr.Close();
+                return "No Amount Found";
+            }
+            catch (TrackingNumberNotFoundException ex)
+            {
+                return ex.Message;
             }
             catch (SqlException ex)
             {
                 Console.WriteLine("SQL Error: " + ex.Message);
+                return "Error retrieving payment amount.";
             }
             finally
             {
                 sqlCon.Close();
             }
-
-            return "No Amount Found";
         }
+
     }
 
 }

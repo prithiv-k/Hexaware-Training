@@ -11,7 +11,7 @@ namespace CodingAssignmentsC_.Util
     {
         public static string GetConnectionString(string filePath)
         {
-            //This code will search current working directory (debug folder) and it will load your setting file into it
+           
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(filePath);

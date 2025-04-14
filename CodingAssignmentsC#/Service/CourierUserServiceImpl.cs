@@ -18,10 +18,10 @@ namespace CodingAssignmentsC_.Service
       
         public List<Courier> GetAllCouriers()
         {
-            return companyObj.Couriers; // assuming Couriers is a List<Courier> inside CourierCompany
+            return companyObj.Couriers; 
         }
 
-        // Implement other methods from ICourierUserService...
+     
         SqlConnection sqlCon = DBConnUtil.GetConnection("appSettings.json");
         SqlCommand cmd = new SqlCommand();
         SqlDataReader dr;
@@ -131,7 +131,7 @@ namespace CodingAssignmentsC_.Service
             }
             catch (TrackingNumberNotFoundException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}"); // Optional detailed message
+                Console.WriteLine($"Error: {ex.Message}"); 
                 return false;
             }
             catch (SqlException ex)
@@ -241,7 +241,7 @@ namespace CodingAssignmentsC_.Service
             {
                 cmd.Connection = sqlCon;
 
-                // Step 1: Get the ServiceID from the TrackingNumber
+                /
                 cmd.CommandText = $"SELECT ServiceID FROM Courier WHERE TrackingNumber = '{trackingNumber}'";
 
                 if (sqlCon.State == System.Data.ConnectionState.Closed)
@@ -256,7 +256,7 @@ namespace CodingAssignmentsC_.Service
 
                 int serviceId = Convert.ToInt32(serviceIdObj);
 
-                // Step 2: Get Amount Details from the CourierServices table
+               
                 cmd.CommandText = $"SELECT Cost FROM CourierServices WHERE ServiceID = {serviceId}";
                 SqlDataReader dr = cmd.ExecuteReader();
 

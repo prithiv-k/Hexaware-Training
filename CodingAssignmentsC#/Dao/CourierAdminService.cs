@@ -20,7 +20,7 @@ namespace CodingAssignmentsC_.Dao
                     throw new ArgumentNullException(nameof(entity), "Entity object cannot be null");
                 }
 
-                // Handling logic specific to Employee type
+              
                 if (typeof(T) == typeof(Employee))
                 {
                     Employee employee = entity as Employee;
@@ -43,7 +43,7 @@ namespace CodingAssignmentsC_.Dao
                        
                         cmd.ExecuteNonQuery();
 
-                        // Retrieve the auto-generated ID using SCOPE_IDENTITY()
+                       
                         queryBuilder.Clear();
                         queryBuilder.Append("SELECT SCOPE_IDENTITY()");
                         cmd.CommandText = queryBuilder.ToString();
@@ -54,12 +54,12 @@ namespace CodingAssignmentsC_.Dao
                     }
                 }
 
-                return -1; // Default return value in case no specific logic matches
+                return -1; 
             }
             catch (SqlException)
             {
-                // Handle SQL errors
-                return -1; // Return an error code
+                
+                return -1; 
             }
             finally
             {

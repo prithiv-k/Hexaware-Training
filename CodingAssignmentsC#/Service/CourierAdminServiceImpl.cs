@@ -37,7 +37,7 @@ namespace CodingAssignmentsC_.Services
 
                 cmd.ExecuteNonQuery();
 
-                // Retrieve the auto-generated EmployeeID using SCOPE_IDENTITY()
+                // Retrive the auto generated Emp Id using SCOPE_IDENTITY()
                 queryBuilder.Clear();
                 queryBuilder.Append("SELECT SCOPE_IDENTITY()");
                 cmd.CommandText = queryBuilder.ToString();
@@ -48,7 +48,7 @@ namespace CodingAssignmentsC_.Services
             }
             catch (SqlException)
             {
-                // Handle SQL errors
+               
                 return -1;
             }
             finally

@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=PRITHIV;Initial Catalog=CrimeReportingSystem;Integrated Security=True;TrustServerCertificate=True;"
+  }
+}
